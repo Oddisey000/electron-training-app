@@ -1,5 +1,10 @@
-html {
-  font-family: sans-serif; 
-  background: #2B2E3B; 
-  color: #9FEAF9;
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  flex-flow: column;
+  font-family: caption;
 }

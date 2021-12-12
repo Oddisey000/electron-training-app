@@ -1,0 +1,17 @@
+#items {
+  flex-grow: 1;
+}
+
+#no-items {
+  font-weight: bold;
+  color: silver;
+  text-align: center;
+  width: 100%;
+  position: absolute;
+  top: 100px;
+  z-index: -1;
+}
+
+#add-item {
+  margin-left: 25px;
+}

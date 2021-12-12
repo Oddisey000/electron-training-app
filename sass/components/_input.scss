@@ -1,0 +1,14 @@
+input {
+  font-size: 20px;
+  border-radius: 5px;
+  border: 1px solid silver;
+  padding: 0 10px;
+}
+input::placeholder {
+  color: lightgray;
+}
+
+input:focus {
+  outline: none;
+  box-shadow: 0 1rem 2rem rgba(#000, .1);
+}

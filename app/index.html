@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="text/javascript" src="./app.js"></script>
+  <title>Hyperlink Manager</title>
+</head>
+<body>
+  <header>
+    <button id="show-modal">&#10095;</button>
+    <input type="text" id="search" placeholder="Пошук">
+  </header>
+  <main>
+    <p id="no-items">Елементи відсутні</p>
+    <div id="items"></div>
+  </main>
+  <div id="modal">
+    <input type="text" id="url" placeholder="Введіть URL">
+    <button id="add-item">Додати</button>
+    <button id="close-modal">Відмінa</button>
+  </div>
+</body>
+</html>
