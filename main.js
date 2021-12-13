@@ -1,14 +1,17 @@
 const {app, BrowserWindow, ipcMain} = require('electron')
 const windowStateKeeper = require('electron-window-state')
 
+const ReadItemModule = require('./app/modules/readItem.module')
+
 /**
  * Using IPC main channels to work with data
- * Set timeout for processing and send back result to browser window
+ * @param itemUrl contaigne address from wich app should create link
+ * @channel send-item-success using for sending processed item to BrowserWindow
  */
 ipcMain.on('send-item', (e, itemUrl) => {
-  setTimeout(() => {
-    e.sender.send('send-item-success', 'New item from main process')
-  }, 2000);
+  ReadItemModule(itemUrl, item => {
+    e.sender.send('send-item-success', item)
+  })
 })
 
 function createWindow () {

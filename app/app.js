@@ -1,4 +1,5 @@
 const { ipcRenderer } = require('electron');
+const items = require('./functions/items');
 
 /**
  * Define required variables for application
@@ -62,12 +63,15 @@ const toggleModalButtons = () => {
 
 /**
  * IPC renderers block
- * @send-item-success channel is using for receiving processed data from the main process
+ * @channel send-item-success is using for receiving processed data from the main process
  * when data received call function for toggling modal buttons
  * hide the modal itself and also input url field when completed
  */
 ipcRenderer.on('send-item-success', (e, newItem) => {
+  items.addItem(newItem, true)
+
   toggleModalButtons()
+
   modal.style.display = 'none'
   itemUrl.value = null
 })
