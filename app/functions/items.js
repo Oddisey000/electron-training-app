@@ -1,5 +1,16 @@
+const fs = require('fs');
+
 // Declare variables for exporting to the app
 let items = document.getElementById('items');
+
+/**
+ * Make separate file to controll newly opened windows behavior
+ * declare constant and asign to it value from external js file
+ */
+let reader;
+fs.readFile(`${__dirname}/reader.js`, (error, respond) => {
+  reader = respond.toString()
+})
 
 // Export storage function to have access to app local storage, set empty array if there is no data
 exports.storage = JSON.parse(localStorage.getItem('hyperlink-manager')) || []
@@ -21,12 +32,28 @@ exports.select = (e) => {
 /** 
  * If there is no elements in storage just return nothing
  * take selected item and select url parameter from the element
+ * open item in proxy BrowserWindow
  */
 exports.open = () => {
   if (!this.storage.length) return
   
   let selectedItem = document.getElementsByClassName('read-item selected')[0]
   let contentURL = selectedItem.dataset.url
+
+  let renderWindow = window.open(
+    contentURL,
+    '', 
+    `
+      maxWidth=2000,
+      maxHeigth=2000,
+      width=1200,
+      heigth=800,
+      backgroundColor=#DEDEDE,
+      nodeIntegration=0,
+      contextIsolation=1
+    `
+  )
+  renderWindow.eval(reader)
 }
 
 /**
