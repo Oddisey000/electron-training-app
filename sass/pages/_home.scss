@@ -8,3 +8,8 @@ body {
   flex-flow: column;
   font-family: caption;
 }
+
+main {
+  flex-grow: 1;
+  overflow: scroll;
+}

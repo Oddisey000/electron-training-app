@@ -1,6 +1,15 @@
-// Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow, ipcMain} = require('electron')
 const windowStateKeeper = require('electron-window-state')
+
+/**
+ * Using IPC main channels to work with data
+ * Set timeout for processing and send back result to browser window
+ */
+ipcMain.on('send-item', (e, itemUrl) => {
+  setTimeout(() => {
+    e.sender.send('send-item-success', 'New item from main process')
+  }, 2000);
+})
 
 function createWindow () {
 
@@ -20,7 +29,8 @@ function createWindow () {
     maxWidth: 650, 
     minHeight: 300,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      contextIsolation: false
     }
   })
 

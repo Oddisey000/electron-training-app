@@ -7,6 +7,10 @@ body {
   flex-flow: column;
   font-family: caption; }
 
+main {
+  flex-grow: 1;
+  overflow: scroll; }
+
 button {
   color: #fff;
   background-color: #04AA6D;
@@ -43,9 +47,6 @@ input:focus {
   outline: none;
   box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1); }
 
-#items {
-  flex-grow: 1; }
-
 #no-items {
   font-weight: bold;
   color: silver;
@@ -57,6 +58,18 @@ input:focus {
 
 #add-item {
   margin-left: 25px; }
+
+.read-item {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  border-bottom: lightgray 1px solid;
+  background: #FAFAFA;
+  padding: 10px; }
+
+.read-item img {
+  width: 20%;
+  margin-right: 25px; }
 
 #modal {
   display: flex;
