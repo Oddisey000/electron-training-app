@@ -7,13 +7,15 @@ const items = require('./functions/items');
  * @var showModal required for show modal window when user request saving data
  * @var closeModal it is a button responsible for closing modal witouth saving the data
  * @var addItem a button used to call saving item procedure
- * @var itemUrl is a text input element from which data should be taken during saving procedure 
+ * @var itemUrl is a text input element from which data should be taken during saving procedure
+ * @var search require for link filtering inside the app
  */
 let modal = document.getElementById('modal');
 let showModal = document.getElementById('show-modal');
 let closeModal = document.getElementById('close-modal');
 let addItem = document.getElementById('add-item');
 let itemUrl = document.getElementById('url');
+let search = document.getElementById('search');
 
 /**
  * Functions to working with modals 
@@ -41,6 +43,25 @@ closeModal.addEventListener('click', event => {
   }
 })
 
+/**
+ * Listen when user type something into search field take the value and procede
+ * make data array from each html element inside class 'read-item'
+ * if element inner text match lookup value then conditionaly display or hide that element
+ */
+search.addEventListener('keyup', e => {
+  Array.from(document.getElementsByClassName('read-item')).forEach(item => {
+    let hasMatch = item.innerText.toLowerCase().includes(search.value)
+    item.style.display = hasMatch ? 'flex' : 'none'
+  })
+})
+
+// Keyboard arrow selection implementation
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+    items.changeSelection(e.key)
+  }
+})
+
 // Additional event for listening when user press Enter button
 itemUrl.addEventListener('keyup', event => {
   if (event.key === 'Enter') addItem.click()
@@ -56,7 +77,7 @@ const toggleModalButtons = () => {
   } else {
     addItem.disabled = true
     addItem.style.opacity = .5
-    addItem.innerText = 'Додавання...'
+    addItem.innerText = 'Опрацювання...'
     closeModal.style.display = 'none'
   }
 }
