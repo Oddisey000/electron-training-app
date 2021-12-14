@@ -10,6 +10,7 @@ let items = document.getElementById('items');
 let reader;
 fs.readFile(`${__dirname}/reader.js`, (error, respond) => {
   reader = respond.toString()
+  console.log(`${__dirname}/reader.js`)
 })
 
 // Export storage function to have access to app local storage, set empty array if there is no data
@@ -29,7 +30,7 @@ exports.select = (e) => {
   e.currentTarget.classList.add('selected')
 }
 
-/** 
+/**
  * If there is no elements in storage just return nothing
  * take selected item and select url parameter from the element
  * open item in proxy BrowserWindow
@@ -55,6 +56,20 @@ exports.open = () => {
   )
   renderWindow.eval(reader)
 }
+
+/**
+ * Get information of opened item
+ * Define selected item to working with
+ */
+exports.getSelectedItem = () => {
+  let selectedItem = document.getElementsByClassName('read-item selected')[0]
+  let itemIndex = 0
+}
+
+// Listen for 'done' renderer window
+window.addEventListener('message', (e) => {
+  
+})
 
 /**
  * Change selection based on which arrow key (up or down) user press

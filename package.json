@@ -12,7 +12,7 @@
     "start": "npm-run-all --parallel compile:sass watch:electron"
   },
   "dependencies": {
-    "electron": "^16.0.4",
+    "electron": "14.2.1",
     "electron-window-state": "^5.0.3",
     "node-sass": "^7.0.0",
     "nodemon": "^2.0.15",
