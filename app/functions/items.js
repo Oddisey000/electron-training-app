@@ -10,8 +10,23 @@ let items = document.getElementById('items');
 let reader;
 fs.readFile(`${__dirname}/reader.js`, (error, respond) => {
   reader = respond.toString()
-  console.log(`${__dirname}/reader.js`)
 })
+
+/**
+ * Get information of opened item
+ * Define selected item to working with
+ * Clean while solution to identify index of currently selected item
+ * Return object with currently selected item and they index
+ */
+ exports.getSelectedItem = () => {
+  let selectedItem = document.getElementsByClassName('read-item selected')[0]
+  let itemIndex = 0
+  let child = selectedItem
+
+  while ((child = child.previousElementSibling) != null ) itemIndex++
+
+  return { node: selectedItem, index: itemIndex }
+}
 
 // Export storage function to have access to app local storage, set empty array if there is no data
 exports.storage = JSON.parse(localStorage.getItem('hyperlink-manager')) || []
@@ -26,7 +41,7 @@ exports.save = () => {
  * Firstly remove selected class from each element and apply it to currently selected on
  */
 exports.select = (e) => {
-  document.getElementsByClassName('read-item selected')[0].classList.remove('selected')
+  this.getSelectedItem().node.classList.remove('selected')
   e.currentTarget.classList.add('selected')
 }
 
@@ -38,8 +53,8 @@ exports.select = (e) => {
 exports.open = () => {
   if (!this.storage.length) return
   
-  let selectedItem = document.getElementsByClassName('read-item selected')[0]
-  let contentURL = selectedItem.dataset.url
+  let selectedItem = this.getSelectedItem()
+  let contentURL = selectedItem.node.dataset.url
 
   let renderWindow = window.open(
     contentURL,
@@ -54,21 +69,19 @@ exports.open = () => {
       contextIsolation=1
     `
   )
-  renderWindow.eval(reader)
+  renderWindow.eval(reader.replace('{{index}}', selectedItem.index))
 }
 
 /**
- * Get information of opened item
- * Define selected item to working with
+ * This function will work for item deletion
+ * Check if remote window response with predefined 'delete-reader-item'
+ * Call delete item function and close remote window immediately
  */
-exports.getSelectedItem = () => {
-  let selectedItem = document.getElementsByClassName('read-item selected')[0]
-  let itemIndex = 0
-}
-
-// Listen for 'done' renderer window
 window.addEventListener('message', (e) => {
-  
+  if (e.data.action === 'delete-reader-item') {
+    this.deleteItem(e.data.itemIndex)
+    e.source.close()
+  }
 })
 
 /**
@@ -76,14 +89,14 @@ window.addEventListener('message', (e) => {
  * Get currently selected element and depending which key was pressed, remove and apply selected class
  */
 exports.changeSelection = (directionKey) => {
-  let currentItem = document.getElementsByClassName('read-item selected')[0]
+  let currentItem = this.getSelectedItem()
   // Handle up or down change
-  if (directionKey === 'ArrowUp' && currentItem.previousElementSibling) {
-    currentItem.classList.remove('selected')
-    currentItem.previousElementSibling.classList.add('selected')
-  } else if (directionKey === 'ArrowDown' && currentItem.nextElementSibling) {
-    currentItem.classList.remove('selected')
-    currentItem.nextElementSibling.classList.add('selected')
+  if (directionKey === 'ArrowUp' && currentItem.node.previousElementSibling) {
+    currentItem.node.classList.remove('selected')
+    currentItem.node.previousElementSibling.classList.add('selected')
+  } else if (directionKey === 'ArrowDown' && currentItem.node.nextElementSibling) {
+    currentItem.node.classList.remove('selected')
+    currentItem.node.nextElementSibling.classList.add('selected')
   }
 }
 
@@ -116,6 +129,23 @@ exports.addItem = (item, isNew = false) => {
 
   if (document.getElementsByClassName('read-item').length === 1) {
     itemNode.classList.add('selected')
+  }
+}
+
+// This function will delete element, when user click close button on remote window
+exports.deleteItem = (elementIndex) => {
+  // Remove item from DOM
+  items.removeChild(items.childNodes[elementIndex])
+  // Remove item from local storage as well
+  this.storage.splice(elementIndex, 1)
+  this.save()
+
+  // Select previous or next item after current was deleted
+  if (this.storage.length) {
+    // Define previous or next element in the array
+    let newSelectedItemIndex = (elementIndex === 0) ? 0 : elementIndex -1;
+    // Select that item
+    document.getElementsByClassName('read-item')[newSelectedItemIndex].classList.add('selected')
   }
 }
 

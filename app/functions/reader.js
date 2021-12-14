@@ -21,7 +21,10 @@ readItClose.style.zIndex = '9999'
  * If it does, give main window response, * means main origin
  */
 readItClose.onclick = (e) => {
-  window.opener.postMessage('item-done', '*')
+  window.opener.postMessage({
+    action: 'delete-reader-item',
+    itemIndex: {{index}}
+  }, '*')
 }
 
 // Append it to the romote content body element
