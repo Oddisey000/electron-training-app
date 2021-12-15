@@ -17,6 +17,32 @@ let addItem = document.getElementById('add-item');
 let itemUrl = document.getElementById('url');
 let search = document.getElementById('search');
 
+// Open modal window from the menu
+ipcRenderer.on('menu-show-modal', () => {
+  showModal.click()
+})
+
+// Filter items whith shortcuts
+ipcRenderer.on('menu-open-item', () => {
+  items.open()
+})
+
+// Delete item from menu
+ipcRenderer.on('menu-delete-item', () => {
+  let selectedItem = items.getSelectedItem()
+  items.deleteItem(selectedItem.index)
+})
+
+// Open item in browser
+ipcRenderer.on('menu-open-item-native', () => {
+  items.openNative()
+})
+
+// Shortcut for search items
+ipcRenderer.on('menu-focus-search', () => {
+  search.focus()
+})
+
 /**
  * Functions to working with modals 
  * @showModal is used to reenable modal window when user click coresponded data

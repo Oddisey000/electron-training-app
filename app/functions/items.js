@@ -1,3 +1,4 @@
+const { shell } = require('electron');
 const fs = require('fs');
 
 // Declare variables for exporting to the app
@@ -70,6 +71,16 @@ exports.open = () => {
     `
   )
   renderWindow.eval(reader.replace('{{index}}', selectedItem.index))
+}
+
+// Open items in native system web browser
+exports.openNative = () => {
+  if (!this.storage.length) return
+  
+  let selectedItem = this.getSelectedItem()
+  let contentURL = selectedItem.node.dataset.url
+
+  shell.openExternal(contentURL)
 }
 
 /**

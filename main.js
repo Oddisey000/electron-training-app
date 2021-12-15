@@ -1,5 +1,6 @@
 const {app, BrowserWindow, ipcMain} = require('electron')
 const windowStateKeeper = require('electron-window-state')
+const appMenu = require('./app/modules/menu.module');
 
 const ReadItemModule = require('./app/modules/readItem.module')
 
@@ -39,6 +40,9 @@ function createWindow () {
 
   // and load the index.html of the app.
   mainWindow.loadFile('./app/index.html')
+
+  // Create application menu
+  appMenu(mainWindow.webContents)
 
   // Manage new window state
   windowState.manage(mainWindow)
